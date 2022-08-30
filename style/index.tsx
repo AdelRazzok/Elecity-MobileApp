@@ -3,12 +3,10 @@ import { StyleSheet } from 'react-native'
 export const mainColor: string = '#35DDF0'
 
 export const styles = StyleSheet.create({
-	container: {
-		paddingBottom: 80,
+	form_container: {
 		paddingHorizontal: 24,
 	},
-	wrapper: {
-		display: 'flex',
+	logo_container: {
 		alignItems: 'center',
 		paddingTop: 80,
 	},
@@ -17,8 +15,8 @@ export const styles = StyleSheet.create({
 		height: 50,
 	},
 	title: {
-		paddingVertical: 48,
 		textAlign: 'center',
+		paddingVertical: 48,
 		fontSize: 26,
 		fontWeight: '700',
 	},
@@ -27,9 +25,13 @@ export const styles = StyleSheet.create({
 		backgroundColor: mainColor,
 	},
 	link: {
-		paddingTop: 16,
 		textAlign: 'center',
+		paddingVertical: 32,
 		fontSize: 16,
 		textDecorationLine: 'underline',
+	},
+	error_msg: {
+		marginBottom: 16,
+		color: 'red',
 	}
 })
