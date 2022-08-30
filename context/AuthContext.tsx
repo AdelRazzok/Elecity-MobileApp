@@ -1,12 +1,11 @@
 import { createContext, useState } from 'react'
 
 interface AuthContextInterface {
-	accessToken: string
 	auth: {}
 	setAuth: React.Dispatch<React.SetStateAction<{}>>
 }
 
-export const AuthContext = createContext<AuthContextInterface | any>(null)
+export const AuthContext = createContext<AuthContextInterface | any>({})
 
 const AuthProvider: React.FC<React.ReactNode> = ({ children }: any) => {
 	const [auth, setAuth] = useState()
