@@ -10,29 +10,32 @@ const Stack = createNativeStackNavigator()
 
 const App: React.FC = () => {
 	return (
-		<AuthProvider>
-			<NavigationContainer>
-				<Stack.Navigator initialRouteName='Login'>
-					<Stack.Screen
-						name='Login'
-						component={Login}
-						options={{ headerShown: false }}
-					/>
+		<Home/>
 
-					<Stack.Screen
-						name='Register'
-						component={Register}
-						options={{ headerShown: false }}
-					/>
 
-					<Stack.Screen
-						name='Home'
-						component={Home}
-						options={{ headerShown: false }}
-					/>
-				</Stack.Navigator>
-			</NavigationContainer>
-		</AuthProvider>
+		// <AuthProvider>
+		// 	<NavigationContainer>
+		// 		<Stack.Navigator initialRouteName='Login'>
+		// 			<Stack.Screen
+		// 				name='Login'
+		// 				component={Login}
+		// 				options={{ headerShown: false }}
+		// 			/>
+
+		// 			<Stack.Screen
+		// 				name='Register'
+		// 				component={Register}
+		// 				options={{ headerShown: false }}
+		// 			/>
+
+		// 			<Stack.Screen
+		// 				name='Home'
+		// 				component={Home}
+		// 				options={{ headerShown: false }}
+		// 			/>
+		// 		</Stack.Navigator>
+		// 	</NavigationContainer>
+		// </AuthProvider>
 	)
 }
 export default App
