@@ -32,7 +32,7 @@ const Login: React.FC = ({ navigation }: any) => {
 				const data = await res.json()
 				setAuth(data.accessToken)
 				setIsValid(true)
-				navigation.navigate('Home')
+				navigation.navigate('Nav')
 			} else {
 				setIsValid(false)
 			}

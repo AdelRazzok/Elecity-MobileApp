@@ -51,7 +51,6 @@ export const styles = StyleSheet.create({
 		marginBottom: 16,
 		color: 'red',
 	},
-<<<<<<< HEAD
 	barcodebox: {
 		backgroundColor: '#000',
 		alignItems: 'center',
@@ -66,12 +65,10 @@ export const styles = StyleSheet.create({
 		flex: 1,
 		alignItems: 'center',
 		justifyContent: 'space-evenly',
-=======
+	},
 	home_container: {
 		flex: 1,
 	},
-
-
 	logoHome: {
 		alignSelf: 'center',
 		marginTop: 10
@@ -183,7 +180,5 @@ export const styles = StyleSheet.create({
 	},
 	offer_hour: {
 		fontSize: 8,
->>>>>>> e98ebec9aafb2bd862c1c887c032f6ab861da4f0
 	}
-
 })
