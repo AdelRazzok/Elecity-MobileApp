@@ -55,3 +55,34 @@ export const registerSchema = Yup.object().shape({
 		.oneOf([Yup.ref('password'), null], 'Les mots de passe doivent correspondre')
 		.required(emptyErr),
 })
+
+export const updateSchema = Yup.object().shape({
+	first_name: Yup
+		.string()
+		.max(50, tooLongErr)
+		.required(emptyErr),
+	last_name: Yup
+		.string()
+		.max(50, tooLongErr)
+		.required(emptyErr),
+	phone: Yup
+		.string()
+		.length(10, invalidErr)
+		.required(emptyErr),
+	birth_date: Yup
+		.string()
+		.length(10, invalidErr)
+		.required(emptyErr),
+	street: Yup
+		.string()
+		.max(50, tooLongErr)
+		.required(emptyErr),
+	city: Yup
+		.string()
+		.max(50, tooLongErr)
+		.required(emptyErr),
+	zipcode: Yup
+		.string()
+		.length(5, invalidErr)
+		.required(emptyErr),
+})

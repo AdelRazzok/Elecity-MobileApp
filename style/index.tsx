@@ -3,6 +3,12 @@ import { StyleSheet } from 'react-native'
 export const mainColor: string = '#35DDF0'
 
 export const styles = StyleSheet.create({
+	container: {
+		flex: 1,
+		backgroundColor: '#fff',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
 	form_container: {
 		paddingHorizontal: 24,
 	},
@@ -22,6 +28,7 @@ export const styles = StyleSheet.create({
 	},
 	button: {
 		paddingVertical: 8,
+		color: '#fff',
 		backgroundColor: mainColor,
 	},
 	link: {
@@ -33,5 +40,20 @@ export const styles = StyleSheet.create({
 	error_msg: {
 		marginBottom: 16,
 		color: 'red',
+	},
+	barcodebox: {
+		backgroundColor: '#000',
+		alignItems: 'center',
+		justifyContent: 'center',
+		height: 400,
+		width: 400,
+		overflow: 'hidden',
+		borderRadius: 20,
+	},
+	rent_button_container: {
+		padding: 32,
+		flex: 1,
+		alignItems: 'center',
+		justifyContent: 'space-evenly',
 	}
 })

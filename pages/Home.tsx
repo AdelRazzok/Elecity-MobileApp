@@ -1,32 +1,40 @@
-import { useContext, useEffect, useState } from 'react'
-import { View, Text } from 'react-native'
-import { AuthContext } from '../context/AuthContext'
-import { styles } from '../style'
+import { useState } from 'react'
+import { BottomNavigation, Button, Text } from 'react-native-paper'
+import Rent from '../pages/Rent'
+import Settings from './Settings'
+import { styles, mainColor } from '../style'
+
+const RentRoute = () => <Rent />
+const DashRoute = () => (
+	<>
+		<Text style={styles.title}>Tableau de bord</Text>
+	</>
+)
+const SettingsRoute = () => <Settings />
 
 const Home: React.FC = () => {
-	const { auth } = useContext(AuthContext)
-	const [userInfos, setUserInfos] = useState<any>({})
+	const [index, setIndex] = useState<number>(1)
+	const [routes] = useState([
+		{ key: 'rent', title: 'Locations', icon: 'car', },
+		{ key: 'dash', title: 'Tableau de bord', icon: 'view-dashboard', },
+		{ key: 'settings', title: 'Paramètres', icon: 'cog', },
+	])
 
-	useEffect(() => {
-		const getUserInfos = async () => {
-			const options = {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': `Bearer ${auth}`,
-				},
-			}
-			const res = await fetch('http://localhost:5000/api/v1/users/me', options)
-			const data = await res.json()
-			setUserInfos(data)
-		}
-		getUserInfos()
-	}, [])
+	const renderScene = BottomNavigation.SceneMap({
+		rent: RentRoute,
+		dash: DashRoute,
+		settings: SettingsRoute,
+	})
 
 	return (
-		<View>
-
-		</View>
+		<BottomNavigation
+			navigationState={{ index, routes }}
+			onIndexChange={setIndex}
+			renderScene={renderScene}
+			activeColor={'#fff'}
+			inactiveColor={'#303030'}
+			barStyle={{ backgroundColor: mainColor }}
+		/>
 	)
 }
 export default Home

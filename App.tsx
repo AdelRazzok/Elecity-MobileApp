@@ -1,5 +1,5 @@
-// import { useContext, useState } from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import { useContext, useState } from 'react'
+import { NavigationContainer, StackActions } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import Login from './pages/Login'
 import Register from './pages/Register'

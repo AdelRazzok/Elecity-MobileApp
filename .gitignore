@@ -10,6 +10,7 @@ npm-debug.*
 *.orig.*
 web-build/
 request.http
+.env
 
 # macOS
 .DS_Store

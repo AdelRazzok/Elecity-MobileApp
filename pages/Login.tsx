@@ -24,15 +24,20 @@ const Login: React.FC = ({ navigation }: any) => {
 			},
 			body: JSON.stringify(values),
 		}
-		const res = await fetch('http://localhost:5000/api/v1/users/login', options)
 
-		if(res.status === 200) {
-			const data = await res.json()
-			setAuth(data.accessToken)
-			setIsValid(true)
-			navigation.navigate('Home')
-		} else {
-			setIsValid(false)
+		try {
+			const res = await fetch(`http://192.168.1.153:5000/api/v1/users/login`, options)
+	
+			if(res.status === 200) {
+				const data = await res.json()
+				setAuth(data.accessToken)
+				setIsValid(true)
+				navigation.navigate('Home')
+			} else {
+				setIsValid(false)
+			}
+		} catch(error) {
+			console.log(error)
 		}
 	}
 
@@ -51,7 +56,10 @@ const Login: React.FC = ({ navigation }: any) => {
 				<Formik
 					initialValues={initialValues}
 					validationSchema={loginSchema}
-					onSubmit={values => login(values)}
+					onSubmit={(values, { setSubmitting }) => {
+						setSubmitting(false)
+						login(values)
+					}}
 				>
 					{({ handleChange, handleBlur, handleSubmit, values }) => (
 						<View style={styles.form_container}>

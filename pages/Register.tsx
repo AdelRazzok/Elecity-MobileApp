@@ -43,7 +43,7 @@ const Register: React.FC = ({ navigation }: any) => {
 			body: JSON.stringify(user),
 		}
 
-		const res = await fetch('http://localhost:5000/api/v1/users/register', options)
+		const res = await fetch(`http://192.168.1.153:5000/api/v1/users/register`, options)
 		if(res.status === 201) {
 			navigation.navigate('Login')
 		} else {
@@ -65,7 +65,10 @@ const Register: React.FC = ({ navigation }: any) => {
 			<Formik
 				initialValues={initialValues}
 				validationSchema={registerSchema}
-				onSubmit={values => register(values)}
+				onSubmit={(values, { setSubmitting }) => {
+					setSubmitting(false)
+					register(values)}
+				}
 			>
 				{({ handleChange, handleBlur, handleSubmit, values }) => (
 					<View style={styles.form_container}>
