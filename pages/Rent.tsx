@@ -1,33 +1,40 @@
-import { useState, useEffect } from 'react';
-import { View, Text } from 'react-native';
-import { Button } from 'react-native-paper';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import { styles } from '../style';
+// @ts-ignore
+import { API_BASE_URL } from '@env'
+import { useState, useEffect } from 'react'
+import { View, Text } from 'react-native'
+import { Button } from 'react-native-paper'
+import { BarCodeScanner } from 'expo-barcode-scanner'
+import { styles } from '../style'
 
 const Rent: React.FC = () => {
 	const [hasPermission, setHasPermission] = useState<boolean | null>(null)
 	const [scanned, setScanned] = useState<boolean>(false)
-	const [url, setUrl] = useState<string>('')
-	const [hasStarted, setHasStarted] = useState<boolean | null>(null)
+	const [url, setUrl] = useState<string | null>(null)
+	const [infos, setInfos] = useState<any>()
 
 	useEffect(() => {
 		askForCameraPermission()
 	}, [])
+
+	// useEffect pour recupérer le role, si user -> historique des rents, si operator -> scanner de QR codes
 	
 	useEffect(() => {
-		const getHasStarted = async () => {
-			const options = {
-				method: 'GET',
-				headers: {
-					'Content-Type': 'application/json',
-					token: 'fcacbd6ab1d8b11bdba1559dec6fce16',
-				},
-			}
-			const res = await (await fetch(url, options)).json()
-			console.log(res)
-			// setHasStarted(res)
-		}
-		if(url != null) getHasStarted()
+		// const getRentInfos = async () => {
+		// 	const options = {
+		// 		method: 'GET',
+		// 		headers: {
+		// 			'Content-Type': 'application/json',
+		// 			token: 'fcacbd6ab1d8b11bdba1559dec6fce16',
+		// 		},
+		// 	}
+		// 	const res = await (await fetch(url!, options)).json()
+			
+		// 	// D'abbord formater les informations qu'on reçoit et les stocker dans infos
+
+		// 	setInfos(res)
+		// }
+		// if(url != null) getRentInfos()
+		console.log(url)
 	}, [url])
 		
 	const askForCameraPermission = async () => {
@@ -40,32 +47,46 @@ const Rent: React.FC = () => {
 		setUrl(data)
 	}
 
-	const startRent = async (url: string) => {
+	const startRent = async () => {
+		// newData -> body avec paramètre a voir sur discord
+		const newData = {
+			has_started: true,
+			start_date_confirmed: new Date(),
+		}
 		const options = {
 			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json',
 				token: 'fcacbd6ab1d8b11bdba1559dec6fce16',
 			},
+			body: JSON.stringify(newData),
 		}
-		// PATCH has_started -> true
+
+		const res = await fetch(`${API_BASE_URL}`, options)
 	}
-	const endRent = async (url: string) => {
-		console.log(`Ending rent : ${url}`)
+
+	const endRent = async () => {
+		// newData -> body avec paramètre a voir sur discord
+		const newData = {
+			end_date_confirmed: new Date(),
+		}
 		const options = {
 			method: 'PATCH',
 			headers: {
 				'Content-Type': 'application/json',
+				token: 'fcacbd6ab1d8b11bdba1559dec6fce16',
 			},
+			body: JSON.stringify(newData),
 		}
-		// PATCH has_started -> false
+
+		const res = await fetch(`${API_BASE_URL}`, options)
 	}
 
 	if (hasPermission === null) {
 		return (
-		<View style={styles.container}>
-			<Text>Demande d'accès à la caméra en cours.</Text>
-		</View>
+			<View style={styles.container}>
+				<Text>Demande d'accès à la caméra en cours.</Text>
+			</View>
 		)
 	}
 	if (hasPermission === false) {
@@ -98,23 +119,25 @@ const Rent: React.FC = () => {
 
 			{scanned && (
 				<View style={styles.rent_button_container}>
-
-					<Button
-						mode='contained'
-						style={styles.button}
-						onPress={() => startRent(url)}
-					>
-						Commencer la location
-					</Button>
-
-					<Button
-						mode='contained'
-						style={styles.button}
-						onPress={() => endRent(url)}
-					>
-						Arrêter la location
-					</Button>
-
+					{
+						// !infos.rent.has_started ?
+						true ?
+							<Button
+								mode='contained'
+								style={styles.button}
+								onPress={() => startRent()}
+							>
+								Commencer la location
+							</Button>
+						:
+							<Button
+								mode='contained'
+								style={styles.button}
+								onPress={() => endRent()}
+							>
+								Arrêter la location
+							</Button>
+					}
 					<Button
 						mode='contained'
 						style={styles.button}

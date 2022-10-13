@@ -1,3 +1,5 @@
+// @ts-ignore
+import { API_BASE_URL } from '@env'
 import { useState, useEffect, useContext } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { Button, TextInput } from 'react-native-paper'
@@ -28,7 +30,7 @@ const Settings: React.FC = () => {
 					Authorization: `Bearer ${auth}`
 				},
 			}
-			const res = await fetch(`http://192.168.1.153:5000/api/v1/users/me`, options)
+			const res = await fetch(`${API_BASE_URL}/users/infos`, options)
 			const data = await res.json()
 
 			const { first_name, last_name, birth_date, phone } = data
@@ -51,7 +53,7 @@ const Settings: React.FC = () => {
 	}, [])
 
 	return (
-		<ScrollView>
+		<View>
 			<Text style={styles.title}>Paramètres</Text>
 
 			<Formik
@@ -180,7 +182,7 @@ const Settings: React.FC = () => {
 					</View>
 				)}
 			</Formik>
-		</ScrollView>
+		</View>
 	)
 }
 export default Settings

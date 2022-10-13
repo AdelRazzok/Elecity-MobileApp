@@ -1,3 +1,5 @@
+// @ts-ignore
+import { API_BASE_URL } from '@env'
 import { View, Image, Text, ScrollView } from 'react-native'
 import { TextInput, Button } from 'react-native-paper'
 import { Formik, ErrorMessage } from 'formik'
@@ -43,7 +45,7 @@ const Register: React.FC = ({ navigation }: any) => {
 			body: JSON.stringify(user),
 		}
 
-		const res = await fetch(`http://192.168.1.153:5000/api/v1/users/register`, options)
+		const res = await fetch(`${API_BASE_URL}/users/register`, options)
 		if(res.status === 201) {
 			navigation.navigate('Login')
 		} else {

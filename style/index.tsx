@@ -68,25 +68,27 @@ export const styles = StyleSheet.create({
 	},
 	home_container: {
 		flex: 1,
+		paddingBottom: 105
 	},
 	logoHome: {
 		alignSelf: 'center',
 		marginTop: 10
 	},
 	helloUser: {
-
 		alignSelf: 'center',
 		padding: 15,
-		fontFamily: 'Montserrat_400Regular'
+		fontFamily: 'Montserrat_400Regular',
+		fontSize: 16
 
 	},
 	parcLocate: {
 		alignSelf: 'center',
-		marginTop: 30,
-		fontFamily: 'Montserrat_400Regular'
+		marginTop: 40,
+		fontFamily: 'Montserrat_400Regular',
+		fontSize: 18
 	},
 	mapLh: {
-		marginTop: 10,
+		marginTop: 30,
 		width: 330,
 		height: 330,
 		borderRadius: 15,
@@ -95,7 +97,8 @@ export const styles = StyleSheet.create({
 	models: {
 		alignSelf: 'center',
 		fontFamily: 'Montserrat_400Regular',
-		marginTop: 20
+		marginTop: 50,
+		fontSize: 18,
 	},
 
 

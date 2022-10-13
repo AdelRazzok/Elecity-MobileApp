@@ -1,3 +1,5 @@
+// @ts-ignore
+import { API_BASE_URL } from '@env'
 import { useContext, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, Image, Text, ScrollView } from 'react-native'
@@ -24,20 +26,15 @@ const Login: React.FC = ({ navigation }: any) => {
 			},
 			body: JSON.stringify(values),
 		}
+		const res = await fetch(`${API_BASE_URL}/users/login`, options)
 
-		try {
-			const res = await fetch(`http://192.168.1.153:5000/api/v1/users/login`, options)
-	
-			if(res.status === 200) {
-				const data = await res.json()
-				setAuth(data.accessToken)
-				setIsValid(true)
-				navigation.navigate('Nav')
-			} else {
-				setIsValid(false)
-			}
-		} catch(error) {
-			console.log(error)
+		if(res.status === 200) {
+			const data = await res.json()
+			setAuth(data.accessToken)
+			setIsValid(true)
+			navigation.navigate('Nav')
+		} else {
+			setIsValid(false)
 		}
 	}
 
