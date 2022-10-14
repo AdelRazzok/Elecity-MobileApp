@@ -1,7 +1,7 @@
 // @ts-ignore
 import { API_BASE_URL, API_TOKEN } from '@env'
 import { useState, useEffect } from 'react'
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import axios from 'axios'
 import { Button } from 'react-native-paper'
 import { BarCodeScanner } from 'expo-barcode-scanner'
@@ -28,7 +28,7 @@ const OperatorRent: React.FC = () => {
 			}).then(res => {
 				// @ts-ignore
 				const rentArray = res.data.filter(obj => obj.rents.length > 0)
-				// if(rentArray.length > 0) setRentInfos(rentArray[0].rents[0])
+				if(rentArray.length > 0) setRentInfos(rentArray[0].rents[0])
 			})
 		}
 		if(url) getRentInfos()
@@ -106,10 +106,9 @@ const OperatorRent: React.FC = () => {
 			</View>
 
 			{scanned && (
-				<View style={styles.rent_button_container}>
+				<ScrollView style={styles.rent_button_container}>
 					{
-						// !rentInfos.has_started ?
-						true ?
+						!rentInfos.has_started ?
 							<Button
 								mode='contained'
 								style={styles.button}
@@ -133,7 +132,7 @@ const OperatorRent: React.FC = () => {
 					>
 						Scanner à nouveau
 					</Button>
-				</View>
+				</ScrollView>
 			)}
 		</View>
 	)
