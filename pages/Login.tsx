@@ -1,6 +1,7 @@
 // @ts-ignore
 import { API_BASE_URL } from '@env'
 import { useContext, useState } from 'react'
+import axios from 'axios'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { View, Image, Text, ScrollView } from 'react-native'
 import { TextInput, Button } from 'react-native-paper'
@@ -18,24 +19,24 @@ const Login: React.FC = ({ navigation }: any) => {
 		password: '',
 	}
 
-	const login = async (values: loginValues) => {
-		const options = {
-			method: 'POST',
+	const login = (values: loginValues) => {
+		const data = JSON.stringify(values)
+		axios({
+			method: 'post',
+			url: `${API_BASE_URL}/users/login`,
 			headers: {
 				'Content-Type': 'application/json',
 			},
-			body: JSON.stringify(values),
-		}
-		const res = await fetch(`${API_BASE_URL}/users/login`, options)
-
-		if(res.status === 200) {
-			const data = await res.json()
-			setAuth(data.accessToken)
-			setIsValid(true)
-			navigation.navigate('Nav')
-		} else {
-			setIsValid(false)
-		}
+			data
+		}).then(res => {
+			if(res.status === 200) {
+				setAuth(res.data.accessToken)
+				setIsValid(true)
+				navigation.navigate('Nav')
+			} else {
+				setIsValid(false)
+			}
+		})
 	}
 
 	return (

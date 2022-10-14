@@ -8,8 +8,9 @@ import { updateValues } from '../interfaces'
 import { updateSchema } from '../schemas'
 import { AuthContext } from '../context/AuthContext'
 import { styles, mainColor } from '../style'
+import axios from 'axios'
 
-const Settings: React.FC = () => {
+const Profile: React.FC = () => {
 	const { auth } = useContext(AuthContext)
 	const [initialValues, setInitialValues] = useState<updateValues>({
 		first_name: '',
@@ -22,39 +23,24 @@ const Settings: React.FC = () => {
 	})
 
 	useEffect(() => {
-		const getInitialValues = async () => {
-			const options = {
-				method: 'GET',
+		(() => {
+			axios({
+				method: 'get',
+				url: `${API_BASE_URL}/users/infos`,
 				headers: {
-					'Content-Type': 'application/json',
-					Authorization: `Bearer ${auth}`
-				},
-			}
-			const res = await fetch(`${API_BASE_URL}/users/infos`, options)
-			const data = await res.json()
-
-			const { first_name, last_name, birth_date, phone } = data
-			const { street, city, zipcode } = data.address
-
-			setInitialValues(prev => {
-				return {
-					...prev,
-					first_name,
-					last_name,
-					street,
-					zipcode,
-					city,
-					birth_date,
-					phone,
+					'Authorization': `Bearer ${auth}`,
 				}
-			})
-		}
-		getInitialValues()
+			}).then(res => {
+				const { first_name, last_name, birth_date, phone } = res.data
+				const { street, city, zipcode } = res.data.address
+				setInitialValues({ first_name, last_name, birth_date, phone, street, city, zipcode })
+			}).catch(err => console.log(err))
+		})()
 	}, [])
 
 	return (
-		<View>
-			<Text style={styles.title}>Paramètres</Text>
+		<ScrollView>
+			<Text style={styles.title}>Profil</Text>
 
 			<Formik
 				initialValues={initialValues}
@@ -182,7 +168,7 @@ const Settings: React.FC = () => {
 					</View>
 				)}
 			</Formik>
-		</View>
+		</ScrollView>
 	)
 }
-export default Settings
+export default Profile

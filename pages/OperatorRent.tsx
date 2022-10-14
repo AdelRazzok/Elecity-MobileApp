@@ -1,42 +1,39 @@
 // @ts-ignore
-import { API_BASE_URL } from '@env'
+import { API_BASE_URL, API_TOKEN } from '@env'
 import { useState, useEffect } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
+import axios from 'axios'
 import { Button } from 'react-native-paper'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import { styles } from '../style'
 
-const Rent: React.FC = () => {
+const OperatorRent: React.FC = () => {
 	const [hasPermission, setHasPermission] = useState<boolean | null>(null)
 	const [scanned, setScanned] = useState<boolean>(false)
 	const [url, setUrl] = useState<string | null>(null)
-	const [infos, setInfos] = useState<any>()
+	const [rentInfos, setRentInfos] = useState<any>({})
 
 	useEffect(() => {
 		askForCameraPermission()
 	}, [])
 
-	// useEffect pour recupérer le role, si user -> historique des rents, si operator -> scanner de QR codes
-	
 	useEffect(() => {
-		// const getRentInfos = async () => {
-		// 	const options = {
-		// 		method: 'GET',
-		// 		headers: {
-		// 			'Content-Type': 'application/json',
-		// 			token: 'fcacbd6ab1d8b11bdba1559dec6fce16',
-		// 		},
-		// 	}
-		// 	const res = await (await fetch(url!, options)).json()
-			
-		// 	// D'abbord formater les informations qu'on reçoit et les stocker dans infos
-
-		// 	setInfos(res)
-		// }
-		// if(url != null) getRentInfos()
-		console.log(url)
+		const getRentInfos = () => {
+			axios({
+				method: 'get',
+				url: url!,
+				headers: {
+					token: API_TOKEN,
+				}
+			}).then(res => {
+				// @ts-ignore
+				const rentArray = res.data.filter(obj => obj.rents.length > 0)
+				// if(rentArray.length > 0) setRentInfos(rentArray[0].rents[0])
+			})
+		}
+		if(url) getRentInfos()
 	}, [url])
-		
+
 	const askForCameraPermission = async () => {
 		const { status } = await BarCodeScanner.requestPermissionsAsync()
 		setHasPermission(status === 'granted')
@@ -47,39 +44,30 @@ const Rent: React.FC = () => {
 		setUrl(data)
 	}
 
-	const startRent = async () => {
-		// newData -> body avec paramètre a voir sur discord
-		const newData = {
-			has_started: true,
-			start_date_confirmed: new Date(),
-		}
-		const options = {
-			method: 'PATCH',
+	const startRent = () => {
+		axios({
+			method: 'patch',
+			url: `${API_BASE_URL}/rents/${rentInfos._id}`,
 			headers: {
-				'Content-Type': 'application/json',
-				token: 'fcacbd6ab1d8b11bdba1559dec6fce16',
+				token: API_TOKEN,
 			},
-			body: JSON.stringify(newData),
-		}
-
-		const res = await fetch(`${API_BASE_URL}`, options)
+			data: {
+				update: 'start',
+			}
+		})
 	}
 
-	const endRent = async () => {
-		// newData -> body avec paramètre a voir sur discord
-		const newData = {
-			end_date_confirmed: new Date(),
-		}
-		const options = {
-			method: 'PATCH',
+	const endRent = () => {
+		axios({
+			method: 'patch',
+			url: `${API_BASE_URL}/rents/${rentInfos._id}`,
 			headers: {
-				'Content-Type': 'application/json',
-				token: 'fcacbd6ab1d8b11bdba1559dec6fce16',
+				token: API_TOKEN,
 			},
-			body: JSON.stringify(newData),
-		}
-
-		const res = await fetch(`${API_BASE_URL}`, options)
+			data: {
+				update: 'end',
+			}
+		})
 	}
 
 	if (hasPermission === null) {
@@ -112,7 +100,7 @@ const Rent: React.FC = () => {
 			<Text style={styles.title}>Gestion de location</Text>
 			<View style={styles.barcodebox}>
 				<BarCodeScanner
-					style={{ height: 720, width: 720 }}
+					style={StyleSheet.absoluteFillObject}
 					onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
 				/>
 			</View>
@@ -120,7 +108,7 @@ const Rent: React.FC = () => {
 			{scanned && (
 				<View style={styles.rent_button_container}>
 					{
-						// !infos.rent.has_started ?
+						// !rentInfos.has_started ?
 						true ?
 							<Button
 								mode='contained'
@@ -150,4 +138,4 @@ const Rent: React.FC = () => {
 		</View>
 	)
 }
-export default Rent
+export default OperatorRent
