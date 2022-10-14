@@ -20,21 +20,21 @@ const Nav: React.FC = () => {
 		{ key: 'profile', title: 'Profil', icon: 'account', },
 	])
 
-	useEffect(() => {
-		(() => {
-			axios({
-				method: 'get',
-				url: `${API_BASE_URL}/users/infos`,
-				headers: {
-					'Authorization': `Bearer ${auth}`,
-				}
-			}).then(res => {
-				console.log(res.data)
-			}).catch(err => console.log(err))
-		})()
-	}, [])
+	// useEffect(() => {
+	// 	(() => {
+	// 		axios({
+	// 			method: 'get',
+	// 			url: `${API_BASE_URL}/users/infos`,
+	// 			headers: {
+	// 				'Authorization': `Bearer ${auth}`,
+	// 			}
+	// 		}).then(res => {
+	// 			setHasRights(res.data.role === 'user' ? false : true)
+	// 		}).catch(err => console.log(err))
+	// 	})()
+	// }, [])
 
-	const RentRoute = () => hasRights ? <UserRent /> : <OperatorRent />
+	const RentRoute = () => !hasRights ? <OperatorRent /> : <UserRent />
 	const DashRoute = () => <Home />
 	const ProfileRoute = () => <Profile />
 

@@ -11,7 +11,7 @@ const OperatorRent: React.FC = () => {
 	const [hasPermission, setHasPermission] = useState<boolean | null>(null)
 	const [scanned, setScanned] = useState<boolean>(false)
 	const [url, setUrl] = useState<string | null>(null)
-	const [rentInfos, setRentInfos] = useState<any>({})
+	const [rentInfos, setRentInfos] = useState<any>()
 
 	useEffect(() => {
 		askForCameraPermission()
@@ -108,7 +108,8 @@ const OperatorRent: React.FC = () => {
 			{scanned && (
 				<ScrollView contentContainerStyle={styles.rent_button_container}>
 					{
-						!rentInfos.has_started ?
+						// !rentInfos.has_started ?
+						true ?
 							<Button
 								mode='contained'
 								style={styles.button}
