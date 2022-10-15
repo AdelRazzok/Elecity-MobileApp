@@ -12,7 +12,8 @@ import { mainColor } from '../style'
 
 const Nav: React.FC = () => {
 	const { auth } = useContext(AuthContext)
-	const [hasRights, setHasRights] = useState<boolean>(false)
+	const [hasRights, setHasRights] = useState<boolean>(true)
+	const [userName, setUserName] = useState<string>('')
 	const [index, setIndex] = useState<number>(1)
 	const [routes] = useState([
 		{ key: 'rent', title: 'Locations', icon: 'car', },
@@ -20,22 +21,24 @@ const Nav: React.FC = () => {
 		{ key: 'profile', title: 'Profil', icon: 'account', },
 	])
 
-	// useEffect(() => {
-	// 	(() => {
-	// 		axios({
-	// 			method: 'get',
-	// 			url: `${API_BASE_URL}/users/infos`,
-	// 			headers: {
-	// 				'Authorization': `Bearer ${auth}`,
-	// 			}
-	// 		}).then(res => {
-	// 			setHasRights(res.data.role === 'user' ? false : true)
-	// 		}).catch(err => console.log(err))
-	// 	})()
-	// }, [])
+	useEffect(() => {
+		(() => {
+			axios({
+				method: 'get',
+				url: `${API_BASE_URL}/users/infos`,
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${auth}`,
+				}
+			}).then(res => {
+				setUserName(res.data.first_name)
+				setHasRights(res.data.role === 'user' ? false : true)
+			}).catch(err => console.log(err))
+		})()
+	}, [])
 
-	const RentRoute = () => !hasRights ? <OperatorRent /> : <UserRent />
-	const DashRoute = () => <Home />
+	const RentRoute = () => hasRights ? <OperatorRent /> : <UserRent />
+	const DashRoute = () => <Home name={userName} />
 	const ProfileRoute = () => <Profile />
 
 	const renderScene = BottomNavigation.SceneMap({

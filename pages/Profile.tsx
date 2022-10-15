@@ -22,21 +22,22 @@ const Profile: React.FC = () => {
 		phone: '',
 	})
 
-	// useEffect(() => {
-	// 	(() => {
-	// 		axios({
-	// 			method: 'get',
-	// 			url: `${API_BASE_URL}/users/infos`,
-	// 			headers: {
-	// 				'Authorization': `Bearer ${auth}`,
-	// 			}
-	// 		}).then(res => {
-	// 			const { first_name, last_name, birth_date, phone } = res.data
-	// 			const { street, city, zipcode } = res.data.address
-	// 			setInitialValues({ first_name, last_name, birth_date, phone, street, city, zipcode })
-	// 		}).catch(err => console.log(err))
-	// 	})()
-	// }, [])
+	useEffect(() => {
+		(() => {
+			axios({
+				method: 'get',
+				url: `${API_BASE_URL}/users/infos`,
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `Bearer ${auth}`,
+				}
+			}).then(res => {
+				const { first_name, last_name, birth_date, phone } = res.data
+				const { street, city, zipcode } = res.data.address
+				setInitialValues({ first_name, last_name, birth_date, phone, street, city, zipcode })
+			}).catch(err => console.log(err))
+		})()
+	}, [])
 
 	return (
 		<ScrollView>

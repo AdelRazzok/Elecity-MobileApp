@@ -96,7 +96,7 @@ const OperatorRent: React.FC = () => {
 	}
 
 	return (
-		<View style={styles.container}>
+		<ScrollView contentContainerStyle={styles.container}>
 			<Text style={styles.title}>Gestion de location</Text>
 			<View style={styles.barcodebox}>
 				<BarCodeScanner
@@ -105,27 +105,18 @@ const OperatorRent: React.FC = () => {
 				/>
 			</View>
 
+			{rentInfos && (
+				<Button
+					mode='contained'
+					style={styles.button}
+					onPress={() => !rentInfos.has_started ? startRent() : endRent()}
+				>
+					{!rentInfos.has_started ? 'Commencer la location' : 'Arrêter la location'}
+				</Button>
+			)}
+
 			{scanned && (
-				<ScrollView contentContainerStyle={styles.rent_button_container}>
-					{
-						// !rentInfos.has_started ?
-						true ?
-							<Button
-								mode='contained'
-								style={styles.button}
-								onPress={() => startRent()}
-							>
-								Commencer la location
-							</Button>
-						:
-							<Button
-								mode='contained'
-								style={styles.button}
-								onPress={() => endRent()}
-							>
-								Arrêter la location
-							</Button>
-					}
+				<View style={styles.rent_button_container}>
 					<Button
 						mode='contained'
 						style={styles.button}
@@ -133,9 +124,9 @@ const OperatorRent: React.FC = () => {
 					>
 						Scanner à nouveau
 					</Button>
-				</ScrollView>
+				</View>
 			)}
-		</View>
+		</ScrollView>
 	)
 }
 export default OperatorRent

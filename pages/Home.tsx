@@ -6,9 +6,11 @@ import { LinearGradient } from 'expo-linear-gradient'
 import { useFonts, Montserrat_400Regular } from '@expo-google-fonts/montserrat'
 import { styles } from '../style'
 
-const Home: React.FC = () => {
-	const [name, setName] = useState<string>('Test')
+interface Props {
+	name: string
+}
 
+const Home: React.FC<Props> = ({ name }) => {
 	let [fontsLoaded] = useFonts({
 		Montserrat_400Regular,
 	})
