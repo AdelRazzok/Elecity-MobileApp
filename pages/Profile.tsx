@@ -1,43 +1,15 @@
-// @ts-ignore
-import { API_BASE_URL } from '@env'
-import { useState, useEffect, useContext } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import { Button, TextInput } from 'react-native-paper'
 import { Formik, ErrorMessage } from 'formik'
 import { updateValues } from '../interfaces'
 import { updateSchema } from '../schemas'
-import { AuthContext } from '../context/AuthContext'
 import { styles, mainColor } from '../style'
-import axios from 'axios'
 
-const Profile: React.FC = () => {
-	const { auth } = useContext(AuthContext)
-	const [initialValues, setInitialValues] = useState<updateValues>({
-		first_name: '',
-		last_name: '',
-		street: '',
-		zipcode: '',
-		city: '',
-		birth_date: '',
-		phone: '',
-	})
+interface Props {
+	initialValues: updateValues
+}
 
-	useEffect(() => {
-		(() => {
-			axios({
-				method: 'get',
-				url: `${API_BASE_URL}/users/infos`,
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': `Bearer ${auth}`,
-				}
-			}).then(res => {
-				const { first_name, last_name, birth_date, phone } = res.data
-				const { street, city, zipcode } = res.data.address
-				setInitialValues({ first_name, last_name, birth_date, phone, street, city, zipcode })
-			}).catch(err => console.log(err))
-		})()
-	}, [])
+const Profile: React.FC<Props> = ({ initialValues }) => {
 
 	return (
 		<ScrollView>

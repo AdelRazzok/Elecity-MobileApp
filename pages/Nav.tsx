@@ -1,5 +1,3 @@
-// @ts-ignore
-import { API_BASE_URL } from '@env'
 import { useState, useEffect, useContext } from 'react'
 import { BottomNavigation } from 'react-native-paper'
 import axios from 'axios'
@@ -8,12 +6,21 @@ import OperatorRent from './OperatorRent'
 import UserRent from './UserRent'
 import Home from './Home'
 import Profile from './Profile'
+import { updateValues } from '../interfaces'
 import { mainColor } from '../style'
 
 const Nav: React.FC = () => {
 	const { auth } = useContext(AuthContext)
-	const [hasRights, setHasRights] = useState<boolean>(true)
-	const [userName, setUserName] = useState<string>('')
+	const [hasRights, setHasRights] = useState<boolean>(false)
+	const [initialValues, setInitialValues] = useState<updateValues>({
+		first_name: '',
+		last_name: '',
+		street: '',
+		zipcode: '',
+		city: '',
+		birth_date: '',
+		phone: '',
+	})
 	const [index, setIndex] = useState<number>(1)
 	const [routes] = useState([
 		{ key: 'rent', title: 'Locations', icon: 'car', },
@@ -21,25 +28,33 @@ const Nav: React.FC = () => {
 		{ key: 'profile', title: 'Profil', icon: 'account', },
 	])
 
+	// MANU_BASE_URL = http://192.168.1.153:5000/api/v1
+	const BASE_URL = 'http://192.168.1.29:80/api/v1'
+
 	useEffect(() => {
 		(() => {
 			axios({
 				method: 'get',
-				url: `${API_BASE_URL}/users/infos`,
+				url: `${BASE_URL}/users/infos`,
 				headers: {
 					'Content-Type': 'application/json',
 					'Authorization': `Bearer ${auth}`,
 				}
 			}).then(res => {
-				setUserName(res.data.first_name)
-				setHasRights(res.data.role === 'user' ? false : true)
+				if(res.data) {
+					const { first_name, last_name, birth_date, phone } = res.data
+					const { street, zipcode, city } = res.data.address
+					setInitialValues(prev => {
+						return {...prev, first_name, last_name, street, zipcode, city, birth_date, phone}
+					})
+				}
 			}).catch(err => console.log(err))
 		})()
 	}, [])
 
-	const RentRoute = () => hasRights ? <OperatorRent /> : <UserRent />
-	const DashRoute = () => <Home name={userName} />
-	const ProfileRoute = () => <Profile />
+	const RentRoute = () => hasRights ? <OperatorRent baseUrl={BASE_URL} /> : <UserRent />
+	const DashRoute = () => <Home name={initialValues.last_name} />
+	const ProfileRoute = () => <Profile initialValues={initialValues} />
 
 	const renderScene = BottomNavigation.SceneMap({
 		rent: RentRoute,

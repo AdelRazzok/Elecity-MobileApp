@@ -1,5 +1,4 @@
 // @ts-ignore
-import { useState } from 'react'
 import { Text } from 'react-native-paper'
 import { View, Image, StatusBar, ScrollView } from 'react-native'
 import { LinearGradient } from 'expo-linear-gradient'

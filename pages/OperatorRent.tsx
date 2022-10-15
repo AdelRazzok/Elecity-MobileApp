@@ -1,5 +1,5 @@
 // @ts-ignore
-import { API_BASE_URL, API_TOKEN } from '@env'
+import { API_TOKEN } from '@env'
 import { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import axios from 'axios'
@@ -7,67 +7,81 @@ import { Button } from 'react-native-paper'
 import { BarCodeScanner } from 'expo-barcode-scanner'
 import { styles } from '../style'
 
-const OperatorRent: React.FC = () => {
+interface Props {
+	baseUrl: string
+}
+
+const OperatorRent: React.FC<Props> = ({ baseUrl }) => {
 	const [hasPermission, setHasPermission] = useState<boolean | null>(null)
 	const [scanned, setScanned] = useState<boolean>(false)
-	const [url, setUrl] = useState<string | null>(null)
 	const [rentInfos, setRentInfos] = useState<any>()
 
-	useEffect(() => {
-		askForCameraPermission()
-	}, [])
-
-	useEffect(() => {
-		const getRentInfos = () => {
-			axios({
-				method: 'get',
-				url: url!,
-				headers: {
-					token: API_TOKEN,
-				}
-			}).then(res => {
-				// @ts-ignore
-				const rentArray = res.data.filter(obj => obj.rents.length > 0)
-				if(rentArray.length > 0) setRentInfos(rentArray[0].rents[0])
-			})
-		}
-		if(url) getRentInfos()
-	}, [url])
+	const API_TOKEN = 'fcacbd6ab1d8b11bdba1559dec6fce16'
 
 	const askForCameraPermission = async () => {
 		const { status } = await BarCodeScanner.requestPermissionsAsync()
 		setHasPermission(status === 'granted')
 	}
 
+	useEffect(() => {
+		askForCameraPermission()
+	}, [])
+
+	const getRentInfos = (url: string) => {
+		axios({
+			method: 'get',
+			url: url!,
+			headers: {
+				token: API_TOKEN,
+			}
+		}).then(res => {
+			// @ts-ignore
+			const rentArray = res.data.filter(obj => obj.rents.length > 0)
+			if(rentArray.length > 0) setRentInfos({
+				_id: rentArray[0].rents[0]._id,
+				has_started: rentArray[0].rents[0].has_started,
+			})
+		}).catch(err => console.log(err))
+	}
+
 	const handleBarCodeScanned = async ({ type, data }: any) => {
 		setScanned(true)
-		setUrl(data)
+		getRentInfos(data)
 	}
 
 	const startRent = () => {
 		axios({
 			method: 'patch',
-			url: `${API_BASE_URL}/rents/${rentInfos._id}`,
+			url: `${baseUrl}/rents/${rentInfos._id}`,
 			headers: {
 				token: API_TOKEN,
 			},
 			data: {
 				update: 'start',
 			}
-		})
+		}).then(res => {
+			if(res.status === 200) {
+				rentInfos(null)
+				setScanned(false)
+			}
+		}).catch(err => console.log(err))
 	}
-
 	const endRent = () => {
 		axios({
 			method: 'patch',
-			url: `${API_BASE_URL}/rents/${rentInfos._id}`,
+			url: `${baseUrl}/rents/${rentInfos._id}`,
 			headers: {
 				token: API_TOKEN,
 			},
 			data: {
 				update: 'end',
 			}
-		})
+		}).then(res => {
+			if(res.status === 200) {
+				rentInfos(null)
+				setScanned(false)
+			}
+		}).catch(err => console.log(err))
 	}
 
 	if (hasPermission === null) {
@@ -120,7 +134,10 @@ const OperatorRent: React.FC = () => {
 					<Button
 						mode='contained'
 						style={styles.button}
-						onPress={() => setScanned(false)}
+						onPress={() => {
+							setRentInfos(null)
+							setScanned(false)
+						}}
 					>
 						Scanner à nouveau
 					</Button>
