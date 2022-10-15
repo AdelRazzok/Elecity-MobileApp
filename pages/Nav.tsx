@@ -11,7 +11,7 @@ import { mainColor } from '../style'
 
 const Nav: React.FC = () => {
 	const { auth } = useContext(AuthContext)
-	const [hasRights, setHasRights] = useState<boolean>(false)
+	const [hasRights, setHasRights] = useState<boolean | null>(null)
 	const [initialValues, setInitialValues] = useState<updateValues>({
 		first_name: '',
 		last_name: '',
