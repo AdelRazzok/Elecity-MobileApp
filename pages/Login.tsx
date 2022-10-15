@@ -23,7 +23,7 @@ const Login: React.FC = ({ navigation }: any) => {
 		const data = JSON.stringify(values)
 		axios({
 			method: 'post',
-			url: `http://192.168.1.29:80/users/login`,
+			url: `http://192.168.1.29:80/api/v1/users/login`,
 			headers: {
 				'Content-Type': 'application/json',
 			},
