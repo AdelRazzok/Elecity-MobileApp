@@ -11,7 +11,7 @@ import { mainColor } from '../style'
 
 const Nav: React.FC = () => {
 	const { auth } = useContext(AuthContext)
-	const [hasRights, setHasRights] = useState<boolean>(true)
+	const [hasRights, setHasRights] = useState<boolean>(false)
 	const [initialValues, setInitialValues] = useState<updateValues>({
 		first_name: '',
 		last_name: '',
@@ -21,6 +21,7 @@ const Nav: React.FC = () => {
 		birth_date: '',
 		phone: '',
 	})
+	const [userId, setUserId] = useState<string>('')
 	const [index, setIndex] = useState<number>(1)
 	const [routes] = useState([
 		{ key: 'rent', title: 'Locations', icon: 'car', },
@@ -42,17 +43,19 @@ const Nav: React.FC = () => {
 				}
 			}).then(res => {
 				if(res.data) {
-					const { first_name, last_name, birth_date, phone } = res.data
+					const { _id, first_name, last_name, birth_date, phone, role } = res.data
 					const { street, zipcode, city } = res.data.address
 					setInitialValues(prev => {
 						return {...prev, first_name, last_name, street, zipcode, city, birth_date, phone}
 					})
+					setUserId(_id)
+					setHasRights(role === 'user' ? false : true)
 				}
 			}).catch(err => console.log(err))
 		})()
 	}, [])
 
-	const RentRoute = () => hasRights ? <OperatorRent baseUrl={BASE_URL} /> : <UserRent />
+	const RentRoute = () => hasRights ? <OperatorRent baseUrl={BASE_URL} /> : <UserRent userId={userId} />
 	const DashRoute = () => <Home name={initialValues.last_name} />
 	const ProfileRoute = () => <Profile initialValues={initialValues} />
 

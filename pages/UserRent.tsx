@@ -1,10 +1,20 @@
 import { View, Text } from 'react-native'
+import { styles } from '../style'
 
-const UserRent: React.FC = () => {
+interface Props {
+	userId: string
+}
+
+const UserRent: React.FC<Props> = ({ userId }) => {
+
+	// rents/user/id
+	console.log(userId)
 
 	return (
-		<View>
-			<Text>Locations utilisateurs</Text>
+		<View style={styles.container}>
+			<Text style={styles.title}>Vos Locations</Text>
+
+			<Text>Vous n'avez aucune location pour le moment.</Text>
 		</View>
 	)
 }
