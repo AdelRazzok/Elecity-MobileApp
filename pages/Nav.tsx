@@ -29,8 +29,9 @@ const Nav: React.FC = () => {
 		{ key: 'profile', title: 'Profil', icon: 'account', },
 	])
 
-	// MANU_BASE_URL = http://192.168.1.153:5000/api/v1
+	// MANU_BASE_URL = http://192.168.1.153:80/api/v1
 	const BASE_URL = 'http://192.168.1.29:80/api/v1'
+	const API_TOKEN = 'fcacbd6ab1d8b11bdba1559dec6fce16'
 
 	useEffect(() => {
 		(() => {
@@ -55,7 +56,7 @@ const Nav: React.FC = () => {
 		})()
 	}, [])
 
-	const RentRoute = () => hasRights ? <OperatorRent baseUrl={BASE_URL} /> : <UserRent userId={userId} />
+	const RentRoute = () => hasRights ? <OperatorRent baseUrl={BASE_URL} token={API_TOKEN} /> : <UserRent baseUrl={BASE_URL} userId={userId} token={API_TOKEN} />
 	const DashRoute = () => <Home name={initialValues.last_name} />
 	const ProfileRoute = () => <Profile initialValues={initialValues} />
 

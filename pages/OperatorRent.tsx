@@ -1,5 +1,3 @@
-// @ts-ignore
-import { API_TOKEN } from '@env'
 import { useState, useEffect } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import axios from 'axios'
@@ -9,14 +7,13 @@ import { styles } from '../style'
 
 interface Props {
 	baseUrl: string
+	token: string
 }
 
-const OperatorRent: React.FC<Props> = ({ baseUrl }) => {
+const OperatorRent: React.FC<Props> = ({ baseUrl, token}) => {
 	const [hasPermission, setHasPermission] = useState<boolean | null>(null)
 	const [scanned, setScanned] = useState<boolean>(false)
 	const [rentInfos, setRentInfos] = useState<any>()
-
-	const API_TOKEN = 'fcacbd6ab1d8b11bdba1559dec6fce16'
 
 	const askForCameraPermission = async () => {
 		const { status } = await BarCodeScanner.requestPermissionsAsync()
@@ -32,7 +29,7 @@ const OperatorRent: React.FC<Props> = ({ baseUrl }) => {
 			method: 'get',
 			url: url!,
 			headers: {
-				token: API_TOKEN,
+				token,
 			}
 		}).then(res => {
 			// @ts-ignore
@@ -54,16 +51,14 @@ const OperatorRent: React.FC<Props> = ({ baseUrl }) => {
 			method: 'patch',
 			url: `${baseUrl}/rents/${rentInfos._id}`,
 			headers: {
-				token: API_TOKEN,
+				token,
 			},
 			data: {
 				update: 'start',
 			}
 		}).then(res => {
-			if(res.status === 200) {
-				rentInfos(null)
-				setScanned(false)
-			}
+			rentInfos(null)
+			setScanned(false)
 		}).catch(err => console.log(err))
 	}
 	const endRent = () => {
@@ -71,16 +66,14 @@ const OperatorRent: React.FC<Props> = ({ baseUrl }) => {
 			method: 'patch',
 			url: `${baseUrl}/rents/${rentInfos._id}`,
 			headers: {
-				token: API_TOKEN,
+				token,
 			},
 			data: {
 				update: 'end',
 			}
 		}).then(res => {
-			if(res.status === 200) {
-				rentInfos(null)
-				setScanned(false)
-			}
+			rentInfos(null)
+			setScanned(false)
 		}).catch(err => console.log(err))
 	}
 

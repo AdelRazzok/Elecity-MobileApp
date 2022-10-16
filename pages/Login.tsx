@@ -19,11 +19,14 @@ const Login: React.FC = ({ navigation }: any) => {
 		password: '',
 	}
 
+	// MANU_BASE_URL = http://192.168.1.153:80/api/v1
+	const BASE_URL = 'http://192.168.1.29:80/api/v1'
+
 	const login = (values: loginValues) => {
 		const data = JSON.stringify(values)
 		axios({
 			method: 'post',
-			url: `http://192.168.1.29:80/api/v1/users/login`,
+			url: `${BASE_URL}/users/login`,
 			headers: {
 				'Content-Type': 'application/json',
 			},
