@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Alert } from 'react-native'
 import axios from 'axios'
 import { Button } from 'react-native-paper'
 import { BarCodeScanner } from 'expo-barcode-scanner'
@@ -56,10 +56,18 @@ const OperatorRent: React.FC<Props> = ({ baseUrl, token}) => {
 			data: {
 				update: 'start',
 			}
-		}).then(res => {
-			rentInfos(null)
-			setScanned(false)
 		}).catch(err => console.log(err))
+
+		Alert.alert(
+			"Succès",
+			"Vous avez démarré la location",
+			[{
+				text: "Valider",
+				onPress: () => {
+					setScanned(false)
+				}
+			}]
+		)
 	}
 	const endRent = () => {
 		axios({
@@ -71,10 +79,18 @@ const OperatorRent: React.FC<Props> = ({ baseUrl, token}) => {
 			data: {
 				update: 'end',
 			}
-		}).then(res => {
-			rentInfos(null)
-			setScanned(false)
 		}).catch(err => console.log(err))
+
+		Alert.alert(
+			"Succès",
+			"Vous avez terminé la location",
+			[{
+				text: "Valider",
+				onPress: () => {
+					setScanned(false)
+				}
+			}]
+		)
 	}
 
 	if (hasPermission === null) {
@@ -112,18 +128,19 @@ const OperatorRent: React.FC<Props> = ({ baseUrl, token}) => {
 				/>
 			</View>
 
-			{rentInfos && (
-				<Button
-					mode='contained'
-					style={styles.button}
-					onPress={() => !rentInfos.has_started ? startRent() : endRent()}
-				>
-					{!rentInfos.has_started ? 'Commencer la location' : 'Arrêter la location'}
-				</Button>
-			)}
-
 			{scanned && (
 				<View style={styles.rent_button_container}>
+
+					{rentInfos && (
+						<Button
+							mode='contained'
+							style={styles.button}
+							onPress={() => !rentInfos.has_started ? startRent() : endRent()}
+						>
+							{!rentInfos.has_started ? 'Commencer la location' : 'Arrêter la location'}
+						</Button>
+					)}
+
 					<Button
 						mode='contained'
 						style={styles.button}

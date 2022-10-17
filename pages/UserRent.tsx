@@ -29,7 +29,7 @@ const UserRent: React.FC<Props> = ({ baseUrl, userId, token }) => {
 						return (
 							<View key={i} style={styles.container}>
 								<Text>
-									Location du {('0' + date.getDay()).slice(-2)}/{('0' + date.getMonth()).slice(-2)}/{date.getFullYear()} :
+									Location du {('0' + date.getDate()).slice(-2)}/{('0' + (date.getMonth() + 1)).slice(-2)}/{date.getFullYear()} :
 								</Text>
 								<Text>Status : {rent.end_date_confirmed ? 'Terminée' : 'En cours'}</Text>
 								<Text>Prix : {rent.price} €</Text>
